@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.util.LruCache;
 import android.widget.ImageView;
 
 import java.io.BufferedInputStream;
@@ -12,13 +13,35 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import static rongwolrd.listdemo.listdemo.ImageLoader.lruCache;
+
 public class ImageLoader {
 
     private ImageView imageView;
     private String url;
+     static LruCache<String,Bitmap> lruCache;
+
+    static {
+        int maxMemory = (int) Runtime.getRuntime().maxMemory();
+        int cacheSizes = maxMemory / 4;
+        lruCache = new LruCache<String, Bitmap>(cacheSizes) {
+            @Override
+            protected int sizeOf(String key, Bitmap value) {
+                return value.getByteCount();
+            }
+        };
+    }
 
 
     public void loadImage() {
+
+        if (lruCache.get(url)!=null){
+            if(imageView.getTag().equals(url)) {
+                imageView.setImageBitmap(lruCache.get(url));
+                return;
+            }
+        }
+
 
         LoadImageAsyncTask loadImageAsyncTask = new LoadImageAsyncTask(imageView, url);
         loadImageAsyncTask.execute(url);
@@ -42,12 +65,10 @@ public class ImageLoader {
 
 */
 
-    public ImageLoader(ImageView imageView, String url) {
+    ImageLoader(ImageView imageView, String url) {
         this.imageView = imageView;
         this.url = url;
 
-
-        //    this.lruCache = MainActivity.lruCache;
     }
 
 }
@@ -57,7 +78,7 @@ class LoadImageAsyncTask extends AsyncTask<String, Void, Bitmap> {
     private ImageView imageView;
     private String url;
 
-    public LoadImageAsyncTask(ImageView imageView, String url) {
+    LoadImageAsyncTask(ImageView imageView, String url) {
         this.imageView = imageView;
         this.url = url;
     }
@@ -75,6 +96,7 @@ class LoadImageAsyncTask extends AsyncTask<String, Void, Bitmap> {
         //}
 
         if (imageView.getTag().equals(url)) {
+            lruCache.put(url,bitmap);
             imageView.setImageBitmap(bitmap);
         }
     }

@@ -21,7 +21,7 @@ public class NewsLoader extends AsyncTask<String, Void, List<NewsBean>> {
     private ListView listView;
     private Context context;
 
-    public NewsLoader(ListView listView, Context context) {
+    NewsLoader(ListView listView, Context context) {
         this.context = context;
         this.listView = listView;
     }
@@ -67,11 +67,7 @@ public class NewsLoader extends AsyncTask<String, Void, List<NewsBean>> {
             }
 
 
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
+        } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
         return newsBeanList;

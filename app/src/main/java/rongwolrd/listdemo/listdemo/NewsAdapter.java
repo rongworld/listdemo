@@ -2,6 +2,8 @@ package rongwolrd.listdemo.listdemo;
 
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +17,13 @@ public class NewsAdapter extends BaseAdapter {
 
     private List<NewsBean> newsBeanList;
     private LayoutInflater layoutInflater;
-    public NewsAdapter(Context context, List<NewsBean> newsBeanList,ListView listView) {
+    NewsAdapter(Context context, List<NewsBean> newsBeanList, ListView listView) {
         this.newsBeanList = newsBeanList;
         layoutInflater = LayoutInflater.from(context);
     }
+
+
+
 
 
     @Override
@@ -61,7 +66,7 @@ public class NewsAdapter extends BaseAdapter {
     }
 
 
-    class ViewHolder {
+    private class ViewHolder {
         private ImageView img;
         private TextView title, content;
     }
