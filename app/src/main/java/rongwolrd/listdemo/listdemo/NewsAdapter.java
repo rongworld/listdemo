@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -17,8 +18,10 @@ public class NewsAdapter extends BaseAdapter {
 
     private List<NewsBean> newsBeanList;
     private LayoutInflater layoutInflater;
+    private Context context;
     NewsAdapter(Context context, List<NewsBean> newsBeanList, ListView listView) {
         this.newsBeanList = newsBeanList;
+        this.context = context;
         layoutInflater = LayoutInflater.from(context);
     }
 
@@ -60,8 +63,10 @@ public class NewsAdapter extends BaseAdapter {
         viewHolder.img.setTag(newsBeanList.get(i).getImg());
         viewHolder.title.setText(newsBeanList.get(i).getTitle());
         viewHolder.content.setText(newsBeanList.get(i).getContent());
-        ImageLoader imageLoader = new ImageLoader(viewHolder.img,newsBeanList.get(i).getImg());
-        imageLoader.loadImage();
+//        ImageLoader imageLoader = new ImageLoader(viewHolder.img,newsBeanList.get(i).getImg());
+//        imageLoader.loadImage();
+
+        Picasso.with(context).load(newsBeanList.get(i).getImg()).into(viewHolder.img);
         return view;
     }
 
