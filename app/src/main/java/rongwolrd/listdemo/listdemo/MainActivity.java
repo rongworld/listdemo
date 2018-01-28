@@ -1,9 +1,7 @@
 package rongwolrd.listdemo.listdemo;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.LruCache;
 import android.widget.ListView;
 import rongwolrd.listdemo.listdemo.R;
 

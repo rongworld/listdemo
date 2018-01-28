@@ -10,23 +10,14 @@ import android.widget.*;
 import java.util.List;
 
 
-public class NewsAdapter extends BaseAdapter implements AbsListView.OnScrollListener{
+public class NewsAdapter extends BaseAdapter {
 
 
-    private int start,end;
     private List<NewsBean> newsBeanList;
     private LayoutInflater layoutInflater;
-    public static String[] URLS;
-    private ImageLoader imageLoader;
     public NewsAdapter(Context context, List<NewsBean> newsBeanList,ListView listView) {
-        listView.setOnScrollListener(this);
         this.newsBeanList = newsBeanList;
-         imageLoader = new ImageLoader(listView);
         layoutInflater = LayoutInflater.from(context);
-        URLS = new String[newsBeanList.size()];
-        for(int i = 0;i<newsBeanList.size();i++){
-            URLS[i] = newsBeanList.get(i).getImg();
-        }
     }
 
 
@@ -64,27 +55,10 @@ public class NewsAdapter extends BaseAdapter implements AbsListView.OnScrollList
         viewHolder.img.setTag(newsBeanList.get(i).getImg());
         viewHolder.title.setText(newsBeanList.get(i).getTitle());
         viewHolder.content.setText(newsBeanList.get(i).getContent());
+        ImageLoader imageLoader = new ImageLoader(viewHolder.img,newsBeanList.get(i).getImg());
+        imageLoader.loadImage();
         return view;
     }
-
-    @Override
-    public void onScrollStateChanged(AbsListView view, int scrollState) {
-
-        if(scrollState == SCROLL_STATE_IDLE){
-            //加载可见项
-            imageLoader.loadImage(start,end);
-        }else{
-            //停止任务
-            imageLoader.cancelLoad();
-        }
-    }
-
-    @Override
-    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        start = firstVisibleItem;
-        end = firstVisibleItem+visibleItemCount;
-    }
-
 
 
     class ViewHolder {
